@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import TransactionList from './TransactionList';
+import TransactionForm from './TransactionForm';
+import SearchBar from './SearchBar';
 
 function App() {
+  const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+
+  const addTransaction = (newTransaction) => {
+    setTransactions([...transactions, newTransaction]);
+  };
+
+  const deleteTransaction = (index) => {
+    const updatedTransactions = [...transactions];
+    updatedTransactions.splice(index, 1);
+    setTransactions(updatedTransactions);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Welcome to the Bank of Flatiron</h1>
+      <TransactionForm addTransaction={addTransaction} />
+      <SearchBar setFilteredTransactions={setFilteredTransactions} transactions={transactions} />
+      <TransactionList transactions={filteredTransactions.length > 0 ? filteredTransactions : transactions} deleteTransaction={deleteTransaction} />
     </div>
   );
 }
